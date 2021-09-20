@@ -107,6 +107,14 @@ dependencies {
     ...
 ```
 
+Prometheus Panel
+
+![Prometheus Panel](img/Prometheus.png "Prometheus Panel")
+
+Grafana JVM Micrometer
+
+![Grafana JVM Micrometer](img/JVM%20(Micrometer).png "Grafana JVM Micrometer")
+
 You can start a sample project of Spring Boot (Ver.2.5.4) with this `proto` folder outside of containers.
 
 Reference:
