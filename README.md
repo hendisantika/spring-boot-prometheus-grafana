@@ -108,3 +108,7 @@ dependencies {
 ```
 
 You can start a sample project of Spring Boot (Ver.2.5.4) with this `proto` folder outside of containers.
+
+Reference:
+https://keepgrowing.in/tools/how-to-set-up-grafana-with-docker-and-connect-it-to-prometheus/
+https://keepgrowing.in/tools/monitoring-spring-boot-projects-with-prometheus/
