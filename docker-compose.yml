@@ -1,16 +1,38 @@
-version: '3.9'
 services:
+  app:
+    build:
+      context: .
+      args:
+        JAVA_TOOL_OPTIONS: ${BUILD_JAVA_TOOL_OPTIONS:-}
+    mem_limit: 768m
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      DEMO_MEMORY_LIMIT_MIB: 256
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/actuator/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
   prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
+    image: prom/prometheus:v3.10.0
+    ports:
+      - "127.0.0.1:9090:9090"
     volumes:
-    - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    ports:
-    - 9090:9090
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus-alerts.yml:/etc/prometheus/alerts.yml:ro
+    depends_on:
+      app:
+        condition: service_healthy
   grafana:
-    image: grafana/grafana:latest
-    container_name: grafana
+    image: grafana/grafana:13.2.3
     ports:
-    - 3000:3000
-    env_file:
-    - ./grafana.env
+      - "127.0.0.1:3000:3000"
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      - prometheus

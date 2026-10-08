@@ -1,0 +1,18 @@
+groups:
+  - name: memory-demo
+    rules:
+      - alert: HighRetainedMemory
+        expr: demo_memory_retained_bytes{job="spring"} > 192 * 1024 * 1024
+        for: 15s
+        labels:
+          severity: warning
+        annotations:
+          summary: "Demo retains more than 192 MiB"
+          description: "The memory algorithm retains {{ $value }} bytes for over 15 seconds."
+      - alert: ApplicationDown
+        expr: up{job="spring"} == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Spring application cannot be scraped"
